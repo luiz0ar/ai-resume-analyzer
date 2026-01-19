@@ -1,0 +1,73 @@
+version: "3.9"
+
+services:
+  ai-resume-analyzer:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: production
+    container_name: ai-resume-analyzer
+    
+    environment:
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - OPENAI_MODEL=${OPENAI_MODEL:-gpt-4o}
+      - OPENAI_TEMPERATURE=${OPENAI_TEMPERATURE:-0.3}
+      - OPENAI_MAX_TOKENS=${OPENAI_MAX_TOKENS:-2000}
+      - LOG_LEVEL=${LOG_LEVEL:-INFO}
+      - PROMPTS_DIR=/app/prompts
+    
+    volumes:
+      - ./prompts:/app/prompts:ro
+      - ./output:/app/output
+    
+    security_opt:
+      - no-new-privileges:true
+    read_only: true
+    tmpfs:
+      - /tmp
+    
+    deploy:
+      resources:
+        limits:
+          cpus: "1.0"
+          memory: 512M
+        reservations:
+          cpus: "0.25"
+          memory: 128M
+    
+    restart: "no"
+    
+    networks:
+      - analyzer-network
+
+  dev:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: production
+    container_name: ai-resume-analyzer-dev
+    
+    environment:
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - OPENAI_MODEL=${OPENAI_MODEL:-gpt-4o}
+      - LOG_LEVEL=DEBUG
+    
+    volumes:
+      - ./app:/app/app:ro
+      - ./prompts:/app/prompts:ro
+      - ./main.py:/app/main.py:ro
+    
+    command: ["python", "-i", "-c", "print('Development shell ready. Import modules as needed.')"]
+    stdin_open: true
+    tty: true
+    
+    networks:
+      - analyzer-network
+    
+    profiles:
+      - dev
+      
+networks:
+  analyzer-network:
+    driver: bridge
+    name: ai-resume-analyzer-network
