@@ -305,17 +305,6 @@ docker-compose --profile dev up
 
 ---
 
-## 🔮 Future Improvements
-
-- [ ] PDF resume parsing with `pypdf`
-- [ ] Web API with FastAPI
-- [ ] Batch processing support
-- [ ] Multiple LLM provider support
-- [ ] Caching layer with Redis
-- [ ] Web UI dashboard
-
----
-
 ## 👤 Author
 
 **AI Resume Analyzer Team**
@@ -323,6 +312,8 @@ docker-compose --profile dev up
 - Luiz Felipe Arcanjo Rangel
 - Portfolio Project - Clean Room Implementation
 - Demonstrates: Python, OpenAI API, Pydantic, Async Programming, Docker
+
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-Profile-blue?logo=linkedin)](https://www.linkedin.com/in/luiz-felipe-arcanjo-rangel-7b9442262/)
 
 ---
 
